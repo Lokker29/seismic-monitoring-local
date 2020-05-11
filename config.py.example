@@ -1,0 +1,8 @@
+MONGO_DB_HOST = 'mongodb://<your_cloud_ip>:27017/'
+
+MONGO_DB_USER = 'user'
+MONGO_DB_PASSWORD = 'password'
+
+MONGO_DB_NAME = 'seismic-test'
+
+BASE_SEISMIC_COLLECTION = 'seismic-collection'

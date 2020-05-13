@@ -23,12 +23,15 @@ def main():
 
 	# last_day = datetime.today() - relativedelta(days=50)
 	# today = datetime.today()
-
+	#
 	# data = client.get_data_by_range_date(last_day, today, 'place')
-	# print(splot.plot_statistic_of_states(data))
-
+	# splot.plot_statistic_of_states(data)
+	#
 	# data = client.get_data_by_range_date(last_day, today, 'time', 'mag')
-	# print(splot.plot_mean_magnitude_by_date(data))
+	# splot.plot_mean_magnitude_by_date(data)
+	#
+	# data = client.get_avg_magnitude_today()
+	# print(data)
 
 
 if __name__ == '__main__':

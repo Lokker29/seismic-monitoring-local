@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from pymongo import MongoClient
 
@@ -35,3 +35,9 @@ class DBClient:
 
         return self.collection.find(filter={'time': {'$gte': start, '$lt': end}},
                                     projection={column: 1 for column in columns})
+
+    def get_avg_magnitude_today(self):
+        collection = self.db['ML-predict']
+        md = list(collection.find().sort('_id', -1).limit(1))[0]
+
+        return md['predict']

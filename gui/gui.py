@@ -4,7 +4,7 @@ import pygame
 from colors_constant import web_colors as colors
 from config import MONGO_DB_NAME, MONGO_DB_HOST, MONGO_DB_USER, MONGO_DB_PASSWORD, BASE_SEISMIC_COLLECTION
 from db import DBClient
-from gui.handlers import count_of_state, avg_mag
+from gui.handlers import count_of_state, avg_mag, show_map
 from gui.utils import text_objects
 from plot import SeismicPlot
 
@@ -53,13 +53,14 @@ def start_app(width=1000, height=600):
 
         ####
         count = 1
-        display_text(display, 'Выберите действие', colors['black'], 30, width / 2, height / 6 * count)
+        division = 7
+        display_text(display, 'Выберите действие', colors['black'], 30, width / 2, height / division * count)
         ####
 
         mouse = pygame.mouse.get_pos()
         ####
         count += 1
-        btn_x_start, btn_y_start = width / 10, height / 6 * count
+        btn_x_start, btn_y_start = width / 10, height / division * count
         btn_width, btn_height = width / 6 * 5, height / 12
         btn_position = (btn_x_start, btn_y_start, btn_width, btn_height)
 
@@ -67,9 +68,19 @@ def start_app(width=1000, height=600):
                     mouse_click_down, 'Количество сейсмических активностей по штатам за период',
                     colors['white'], 20, btn_x_start + btn_width / 2, btn_y_start + btn_height / 2,
                     client=client, splot=splot)
+
         ####
         count += 1
-        btn_y_start = height / 6 * 3
+        btn_y_start = height / division * count
+        btn_position = (btn_x_start, btn_y_start, btn_width, btn_height)
+
+        display_btn(display, mouse, btn_position, colors['blackmagic'], colors['knightsarmor'], 'show_map',
+                    mouse_click_down, 'Отобразить на карте последние 1000 сейсмических активностей', colors['white'],
+                    20, btn_x_start + btn_width / 2, btn_y_start + btn_height / 2,
+                    client=client, splot=splot)
+        ####
+        count += 1
+        btn_y_start = height / division * count
         btn_position = (btn_x_start, btn_y_start, btn_width, btn_height)
 
         display_btn(display, mouse, btn_position, colors['blackmagic'], colors['knightsarmor'], 'avg_mag',
@@ -78,7 +89,7 @@ def start_app(width=1000, height=600):
                     client=client, splot=splot)
         ####
         count += 1
-        btn_y_start = height / 6 * 4
+        btn_y_start = height / division * count
         btn_position = (btn_x_start, btn_y_start, btn_width, btn_height)
 
         display_btn(display, mouse, btn_position, colors['blackmagic'], colors['knightsarmor'], 'ai_today_mag',
@@ -87,7 +98,7 @@ def start_app(width=1000, height=600):
                     width=width, height=height, client=client)
         ####
         count += 1
-        btn_y_start = height / 6 * 5
+        btn_y_start = height / division * count
         btn_position = (btn_x_start, btn_y_start, btn_width, btn_height)
 
         display_btn(display, mouse, btn_position, colors['blackmagic'], colors['knightsarmor'], 'quit',
@@ -110,6 +121,7 @@ def handler_btn(display, mouse, pos, color_before, color_during, action=None, mo
         'ai_today_mag': ai_today_mag,
         'return_to_main': start_app,
         'quit': handle_quit,
+        'show_map': show_map,
     }
 
     if pos[0] + pos[2] > mouse[0] > pos[0] and pos[1] + pos[3] > mouse[1] > pos[1]:

@@ -1,9 +1,6 @@
-from datetime import datetime
-
-from dateutil.relativedelta import relativedelta
-
 from config import MONGO_DB_HOST, MONGO_DB_USER, MONGO_DB_PASSWORD, MONGO_DB_NAME, BASE_SEISMIC_COLLECTION
 from db import DBClient
+from gui.gui import start_app
 from plot import SeismicPlot
 
 
@@ -32,6 +29,7 @@ def main():
 	#
 	# data = client.get_avg_magnitude_today()
 	# print(data)
+	start_app()
 
 
 if __name__ == '__main__':

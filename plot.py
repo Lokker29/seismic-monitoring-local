@@ -30,9 +30,10 @@ class SeismicPlot:
 
     def plot_statistic_of_states(self, data):
         statistic = self._statistic_of_states(data)
+        cut_dict = dict(tuple(statistic.items())[:30])
 
-        plt.xticks(rotation=40)
-        plt.bar(statistic.keys(), statistic.values(), color='g')
+        plt.xticks(rotation=60)
+        plt.bar(cut_dict.keys(), cut_dict.values(), color='g')
         plt.show()
 
     def plot_mean_magnitude_by_date(self, data):

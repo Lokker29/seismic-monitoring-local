@@ -55,22 +55,20 @@ class SeismicPlot:
         world = geopandas.read_file(
             geopandas.datasets.get_path('naturalearth_lowres')
         )
-        usa = world[world.iso_a3 == 'USA']
 
-        coords = self.prepare_data_for_map(data)
+        coords = self._prepare_data_for_map(data)
 
-        ax = coords.plot(zorder=2, figsize=(20, 9))
-        usa.plot(zorder=1, ax=ax, color='white', edgecolor='black', figsize=(20, 9))
+        ax = coords.plot(zorder=2, markersize=13, figsize=(20, 9))
+        world.plot(zorder=1, ax=ax, color='white', edgecolor='black', figsize=(20, 9))
 
         plt.show()
 
-    def prepare_data_for_map(self, data, limit=3000):
+    def _prepare_data_for_map(self, data, limit=3000):
         coords = []
 
         for row in data:
             coords.append([row['coord'], row['time']])
 
-        coords = self.only_usa(coords)
         coords = list(sorted(coords, key=lambda x: x[1], reverse=True))
 
         coords = [coord for coord, _ in coords]
@@ -85,26 +83,26 @@ class SeismicPlot:
 
         return gdf
 
-    def only_usa(self, coords):
-        usa = {'sw': {'lat': 24.9493, 'lng': -125.0011}, 'ne': {'lat': 49.5904, 'lng': -66.9326}}
-
-        alaska = {'sw': {'lat': 49, 'lng': -175}, 'ne': {'lat': 72, 'lng': -128}}
-
-        result = []
-
-        sw = usa['sw']
-        ne = usa['ne']
-
-        for point, time in coords:
-            if sw['lng'] < point[0] < ne['lng'] and sw['lat'] < point[1] < ne['lat']:
-                result.append((point, time))
-
-        sw = alaska['sw']
-        ne = alaska['ne']
-        print(len(result))
-        for point, time in coords:
-            if sw['lng'] < point[0] < ne['lng'] and sw['lat'] < point[1] < ne['lat']:
-                result.append((point, time))
-        print(len(result))
-
-        return result
+    # def only_usa(self, coords):
+    #     usa = {'sw': {'lat': 24.9493, 'lng': -125.0011}, 'ne': {'lat': 49.5904, 'lng': -66.9326}}
+    #     alaska = {'sw': {'lat': 49, 'lng': -175}, 'ne': {'lat': 72, 'lng': -128}}
+    #     gavaii = {'sw': {'lat': 17, 'lng': -161}, 'ne': {'lat': 23, 'lng': -154}}
+    #
+    #     regions = {
+    #         'usa': usa, 'alaska': alaska, 'gavaii': gavaii
+    #     }
+    #     result = []
+    #
+    #     for point, time in coords:
+    #         in_region = False
+    #
+    #         for bounds in regions.values():
+    #             sw = bounds['sw']
+    #             ne = bounds['ne']
+    #             if sw['lng'] < point[0] < ne['lng'] and sw['lat'] < point[1] < ne['lat']:
+    #                 in_region = True
+    #
+    #         if in_region:
+    #             result.append((point, time))
+    #
+    #     return result

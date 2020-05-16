@@ -65,7 +65,7 @@ def start_app(width=1000, height=600):
         btn_position = (btn_x_start, btn_y_start, btn_width, btn_height)
 
         display_btn(display, mouse, btn_position, colors['blackmagic'], colors['knightsarmor'], 'state_statistic',
-                    mouse_click_down, 'Количество сейсмических активностей по штатам за период',
+                    mouse_click_down, 'Количество сейсмических активностей по странам/штатам за период',
                     colors['white'], 20, btn_x_start + btn_width / 2, btn_y_start + btn_height / 2,
                     client=client, splot=splot)
 
@@ -75,7 +75,7 @@ def start_app(width=1000, height=600):
         btn_position = (btn_x_start, btn_y_start, btn_width, btn_height)
 
         display_btn(display, mouse, btn_position, colors['blackmagic'], colors['knightsarmor'], 'show_map',
-                    mouse_click_down, 'Отобразить на карте последние 3000 сейсмических активностей', colors['white'],
+                    mouse_click_down, 'Отобразить на карте последние сейсмические активности', colors['white'],
                     20, btn_x_start + btn_width / 2, btn_y_start + btn_height / 2,
                     client=client, splot=splot)
         ####
@@ -84,7 +84,7 @@ def start_app(width=1000, height=600):
         btn_position = (btn_x_start, btn_y_start, btn_width, btn_height)
 
         display_btn(display, mouse, btn_position, colors['blackmagic'], colors['knightsarmor'], 'avg_mag',
-                    mouse_click_down, 'Средняя магнитуда по США по дням за период',
+                    mouse_click_down, 'Средняя магнитуда на планете по дням за период',
                     colors['white'], 20, btn_x_start + btn_width / 2, btn_y_start + btn_height / 2,
                     client=client, splot=splot)
         ####
@@ -93,7 +93,7 @@ def start_app(width=1000, height=600):
         btn_position = (btn_x_start, btn_y_start, btn_width, btn_height)
 
         display_btn(display, mouse, btn_position, colors['blackmagic'], colors['knightsarmor'], 'ai_today_mag',
-                    mouse_click_down, 'Средняя магнитуда по США на сегодняшний день (Машинное обучение)',
+                    mouse_click_down, 'Вероятная средняя магнитуда на сегодняшний день (Машинное обучение)',
                     colors['white'], 20, btn_x_start + btn_width / 2, btn_y_start + btn_height / 2,
                     width=width, height=height, client=client)
         ####
@@ -102,7 +102,7 @@ def start_app(width=1000, height=600):
         btn_position = (btn_x_start, btn_y_start, btn_width, btn_height)
 
         display_btn(display, mouse, btn_position, colors['blackmagic'], colors['knightsarmor'], 'quit',
-                    mouse_click_down, 'Завершить приложение', colors['white'], 20,
+                    mouse_click_down, 'Завершить', colors['white'], 20,
                     btn_x_start + btn_width / 2, btn_y_start + btn_height / 2)
         ####
 
@@ -163,8 +163,9 @@ def ai_today_mag(client, **kwargs):
         display.fill(colors['bisque'])
 
         data = round(data, 2)
-        text = f'Сегодня {date.today().strftime("%d-%m-%Y")} средняя магнитуда будет составлять {str(data)}'
-        display_text(display, text, colors['black'], 30, width / 2, height / 6)
+        text = [f'Сегодня {date.today().strftime("%d-%m-%Y")} средняя магнитуда', f'будет составлять {str(data)}']
+        for num, elem in enumerate(text):
+            display_text(display, elem, colors['black'], 30, width / 2, height / 6 + num * 50)
 
         mouse = pygame.mouse.get_pos()
 

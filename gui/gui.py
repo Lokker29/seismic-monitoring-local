@@ -75,7 +75,7 @@ def start_app(width=1000, height=600):
         btn_position = (btn_x_start, btn_y_start, btn_width, btn_height)
 
         display_btn(display, mouse, btn_position, colors['blackmagic'], colors['knightsarmor'], 'show_map',
-                    mouse_click_down, 'Отобразить на карте последние 1000 сейсмических активностей', colors['white'],
+                    mouse_click_down, 'Отобразить на карте последние 3000 сейсмических активностей', colors['white'],
                     20, btn_x_start + btn_width / 2, btn_y_start + btn_height / 2,
                     client=client, splot=splot)
         ####

@@ -64,14 +64,16 @@ class SeismicPlot:
 
         plt.show()
 
-    def prepare_data_for_map(self, data, limit=1000):
+    def prepare_data_for_map(self, data, limit=3000):
         coords = []
 
         for row in data:
             coords.append([row['coord'], row['time']])
 
-        coords = list(sorted(coords, key=lambda x: x[1], reverse=True))
         coords = self.only_usa(coords)
+        coords = list(sorted(coords, key=lambda x: x[1], reverse=True))
+
+        coords = [coord for coord, _ in coords]
 
         longitude = [coord[0] for coord in coords[:limit]]
         latitude = [coord[1] for coord in coords[:limit]]
@@ -86,13 +88,23 @@ class SeismicPlot:
     def only_usa(self, coords):
         usa = {'sw': {'lat': 24.9493, 'lng': -125.0011}, 'ne': {'lat': 49.5904, 'lng': -66.9326}}
 
+        alaska = {'sw': {'lat': 49, 'lng': -175}, 'ne': {'lat': 72, 'lng': -128}}
+
         result = []
 
         sw = usa['sw']
         ne = usa['ne']
 
-        for point, _ in coords:
+        for point, time in coords:
             if sw['lng'] < point[0] < ne['lng'] and sw['lat'] < point[1] < ne['lat']:
-                result.append(point)
+                result.append((point, time))
+
+        sw = alaska['sw']
+        ne = alaska['ne']
+        print(len(result))
+        for point, time in coords:
+            if sw['lng'] < point[0] < ne['lng'] and sw['lat'] < point[1] < ne['lat']:
+                result.append((point, time))
+        print(len(result))
 
         return result

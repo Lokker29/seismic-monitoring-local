@@ -32,6 +32,7 @@ class SeismicPlot:
         statistic = self._statistic_of_states(data)
         cut_dict = dict(tuple(statistic.items())[:30])
 
+        plt.figure(figsize=(20, 9))
         plt.xticks(rotation=60)
         plt.bar(cut_dict.keys(), cut_dict.values(), color='g')
         plt.show()
@@ -41,6 +42,7 @@ class SeismicPlot:
 
         statistic = {date_.strftime("%d-%m-%Y"): mean_list(mags) for date_, mags in statistic.items()}
 
-        plt.xticks(rotation=90)
+        plt.figure(figsize=(20, 9))
+        plt.xticks(rotation=-90)
         plt.plot(tuple(statistic.keys()), tuple(statistic.values()), color='g')
         plt.show()

@@ -34,7 +34,7 @@ def start_app(width=1000, height=600):
 
     active = True
 
-    game_display = pygame.display.set_mode((width, height))
+    display = pygame.display.set_mode((width, height))
     pygame.display.set_caption("Seismic statistic")
 
     clock = pygame.time.Clock()
@@ -49,53 +49,56 @@ def start_app(width=1000, height=600):
 
         mouse_click_down = pygame.MOUSEBUTTONDOWN in events_type
 
-        game_display.fill(colors['bisque'])
+        display.fill(colors['bisque'])
 
         ####
-        display_text(game_display, 'Выберите действие', colors['black'], 30, width / 2, height / 6)
+        count = 1
+        display_text(display, 'Выберите действие', colors['black'], 30, width / 2, height / 6 * count)
         ####
 
         mouse = pygame.mouse.get_pos()
         ####
-        btn_x_start, btn_y_start = width / 10, height / 6 * 2
+        count += 1
+        btn_x_start, btn_y_start = width / 10, height / 6 * count
         btn_width, btn_height = width / 6 * 5, height / 12
         btn_position = (btn_x_start, btn_y_start, btn_width, btn_height)
 
-        handler_btn(game_display, mouse, btn_position, colors['blackmagic'], colors['knightsarmor'], 'state_statistic',
-                    mouse_click_down, client=client, splot=splot)
-        display_text(game_display, 'Количество сейсмических активностей по штатам за период', colors['white'], 20,
-                     btn_x_start + btn_width / 2, btn_y_start + btn_height / 2)
+        display_btn(display, mouse, btn_position, colors['blackmagic'], colors['knightsarmor'], 'state_statistic',
+                    mouse_click_down, 'Количество сейсмических активностей по штатам за период',
+                    colors['white'], 20, btn_x_start + btn_width / 2, btn_y_start + btn_height / 2,
+                    client=client, splot=splot)
         ####
+        count += 1
         btn_y_start = height / 6 * 3
         btn_position = (btn_x_start, btn_y_start, btn_width, btn_height)
 
-        handler_btn(game_display, mouse, btn_position, colors['blackmagic'], colors['knightsarmor'], 'avg_mag',
-                    mouse_click_down, client=client, splot=splot)
-        display_text(game_display, 'Средняя магнитуда по США по дням за период', colors['white'], 20,
-                     btn_x_start + btn_width / 2, btn_y_start + btn_height / 2)
+        display_btn(display, mouse, btn_position, colors['blackmagic'], colors['knightsarmor'], 'avg_mag',
+                    mouse_click_down, 'Средняя магнитуда по США по дням за период',
+                    colors['white'], 20, btn_x_start + btn_width / 2, btn_y_start + btn_height / 2,
+                    client=client, splot=splot)
         ####
+        count += 1
         btn_y_start = height / 6 * 4
         btn_position = (btn_x_start, btn_y_start, btn_width, btn_height)
 
-        handler_btn(game_display, mouse, btn_position, colors['blackmagic'], colors['knightsarmor'], 'ai_today_mag',
-                    mouse_click_down, width=width, height=height, client=client)
-        display_text(game_display, 'Средняя магнитуда по США на сегодняшний день (Машинное обучение)', colors['white'],
-                     20, btn_x_start + btn_width / 2, btn_y_start + btn_height / 2)
+        display_btn(display, mouse, btn_position, colors['blackmagic'], colors['knightsarmor'], 'ai_today_mag',
+                    mouse_click_down, 'Средняя магнитуда по США на сегодняшний день (Машинное обучение)',
+                    colors['white'], 20, btn_x_start + btn_width / 2, btn_y_start + btn_height / 2,
+                    width=width, height=height, client=client)
         ####
+        count += 1
         btn_y_start = height / 6 * 5
         btn_position = (btn_x_start, btn_y_start, btn_width, btn_height)
 
-        handler_btn(game_display, mouse, btn_position, colors['blackmagic'], colors['knightsarmor'], 'quit',
-                    mouse_click_down)
-        display_text(game_display, 'Завершить приложение', colors['white'],
-                     20, btn_x_start + btn_width / 2, btn_y_start + btn_height / 2)
+        display_btn(display, mouse, btn_position, colors['blackmagic'], colors['knightsarmor'], 'quit',
+                    mouse_click_down, 'Завершить приложение', colors['white'], 20,
+                    btn_x_start + btn_width / 2, btn_y_start + btn_height / 2)
         ####
 
         pygame.display.update()
         clock.tick(20)
 
-    pygame.quit()
-    quit()
+    handle_quit()
 
 
 def handler_btn(display, mouse, pos, color_before, color_during, action=None, mouse_click=False, **kwargs):
@@ -157,10 +160,9 @@ def ai_today_mag(client, **kwargs):
         btn_width, btn_height = width / 6 * 5, height / 12
         btn_position = (btn_x_start, btn_y_start, btn_width, btn_height)
 
-        handler_btn(display, mouse, btn_position, colors['blackmagic'], colors['knightsarmor'], 'return_to_main',
-                    mouse_click_down, width=width, height=height)
-        display_text(display, 'Вернуться на начало', colors['white'],
-                     20, btn_x_start + btn_width / 2, btn_y_start + btn_height / 2)
+        display_btn(display, mouse, btn_position, colors['blackmagic'], colors['knightsarmor'], 'return_to_main',
+                    mouse_click_down, 'Вернуться на начало', colors['white'], 20,
+                    btn_x_start + btn_width / 2, btn_y_start + btn_height / 2, width=width, height=height)
 
         pygame.display.update()
         clock.tick(20)
@@ -169,3 +171,10 @@ def ai_today_mag(client, **kwargs):
 def handle_quit():
     pygame.quit()
     quit()
+
+
+def display_btn(display, mouse, pos, color_before, color_during, action, clicked, text, text_color, font_size,
+                text_x_center, text_y_center, **kwargs):
+
+    handler_btn(display, mouse, pos, color_before, color_during, action, clicked, **kwargs)
+    display_text(display, text, text_color, font_size, text_x_center, text_y_center)

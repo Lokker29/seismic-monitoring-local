@@ -1,5 +1,5 @@
 import json
-from datetime import date
+from datetime import date, datetime, timedelta
 from urllib.request import urlopen
 
 import geopandas
@@ -30,7 +30,18 @@ class SeismicPlot:
             day = date.fromtimestamp(row['time'] / TIME_CONSTANT)
             statistic[day] = statistic.get(day, []) + [row['mag']]
 
-        return dict(sorted(statistic.items(), key=lambda x: x[0]))
+        statistic = dict(sorted(statistic.items(), key=lambda x: x[0]))
+        minimul_date = tuple(statistic.items())[0][0]
+
+        today = date.today()
+        days = (today - minimul_date).days
+        for number in range(days):
+            new_date = minimul_date + timedelta(days=number)
+            if new_date not in statistic.keys():
+                statistic[new_date] = [0]
+
+        statistic = dict(sorted(statistic.items(), key=lambda x: x[0]))
+        return statistic
 
     def plot_statistic_of_states(self, data):
         statistic = self._statistic_of_states(data)
@@ -44,7 +55,7 @@ class SeismicPlot:
     def plot_mean_magnitude_by_date(self, data):
         statistic = self._statistic_of_magnitude_by_date(data)
 
-        statistic = {date_.strftime("%d-%m-%Y"): mean_list(mags) for date_, mags in statistic.items()}
+        statistic = {date_.strftime("%d-%m-%Y"): mean_list(mags) for date_, mags in tuple(statistic.items())[:50]}
 
         plt.figure(figsize=(20, 9))
         plt.xticks(rotation=-90)
